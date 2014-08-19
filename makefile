@@ -5,7 +5,7 @@ SHELL=/bin/bash
 
 ALL = clean $(OBJS) cleantests
 
-OBJS = common.o mat.o mcoding.o region_xor.o zcode.o
+OBJS = common.o lil.o mcoding.o region_xor.o zcode.o
 
 all:$(ALL)
 

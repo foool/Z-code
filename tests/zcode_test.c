@@ -36,39 +36,25 @@ int main(int argc, char const* argv[])
     if (argc>4) datasize = atoi(argv[4])*1024*1024; // MB
     if (argc>5) packetsize = atoi(argv[5])*1024; // KB
 
-    int ret;
+    printf("data size : %.1fMB  \n", (datasize*1.0)/(1024.0*1024.0));
+    printf("packet size:%.1fKB  \n", (packetsize*1.0)/(1024.0));
+
+    int r;
     // test zcode init
-    printf("Init zcode:\n");
-    ret = z_init(&zcode, m, k, datasize, packetsize);
-    printf("init ret: %d\n", ret);
+    r = z_init(&zcode, m, k, datasize, packetsize);
+    printf("main block_size : %d\n",zcode.blocksize);
 
     // init data 
-    pdata = (unsigned char *)malloc((zcode.pmat->col+zcode.pmat->row)* zcode.blocksize);
+    pdata = (unsigned char *)malloc((m+k)*r*zcode.blocksize);
 
     // test zcode encode
     printf("Encode zcode:\n");
     psrc = pdata;
-    pdes = pdata + (zcode.pmat->col)*(zcode.blocksize);
-    ret = z_encode(&zcode, psrc, pdes);
-    printf("encode ret: %d\n", ret);
-
-    // test zcode repair
-    printf("Repair:\n");
-    blist_t help;
-    help.len = zcode.pmat->col+zcode.pmat->row;
-    help.plist = (int*)malloc(sizeof(int)*(help.len));
-    int i;
-    for (i = 0; i < help.len; i++) {
-        help.plist[i] = i;
-    }
-    psrc = pdata;
-    pdes = pdata + node * (zcode.blocksize) * (zcode.pmat->col)/k;
-    ret = z_repair(&zcode, psrc, &help, node, pdes);
-    printf("num = %d , repair ret: %d\n", node, ret);
+    pdes = pdata + (k*r*(zcode.blocksize));
+    z_encode(&zcode, psrc, pdes);
 
     z_free(&zcode);
     free(pdata);
-    free(help.plist);
 
     return 0;
 }

@@ -10,6 +10,7 @@ void log_message(const char *filename, int line, const char *function, const cha
 
 void * rlc_alloc(const char *filename, int line, const char *function, int size);
 
+inline int math_pow(int exp, int index);
 
 #define print_error(fmt, args...) log_message(__FILE__, __LINE__, __FUNCTION__, fmt, ##args)
 

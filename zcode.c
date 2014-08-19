@@ -6,11 +6,13 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "zcode.h"
 #include "common.h"
 #include "mcoding.h"
 #include "region_xor.h"
 
+/*
 static int find(int *list, int start, int end, int key)
 {
     int i;
@@ -120,12 +122,13 @@ static int get_repair_list(blist_t *list, z_info_t *pzinfo, int node)
     } // while (c_start < c_end)
     return 1;
 }
+*/
 
-int z_init(z_info_t *pzinfo, int m, int k, int datasize, int packetsize)
-{
-    pzinfo->pmat = (gfmat_t*)zalloc(sizeof(gfmat_t));
-    mat_init(pzinfo->pmat);
-    make_parity_brc_bitmatrix(pzinfo->pmat, m+k, k);
+int z_init(z_info_t *pzinfo, int m, int k, int datasize, int packetsize){
+
+    pzinfo->pzlil = (lil_t *)LIL_ALLOC(m, k);
+    make_pgm_lil(pzinfo->pzlil, m, k);
+    print_matrix(pzinfo->pzlil, LIL_ROW(m,k), LIL_COL(m,k));
 
     pzinfo->m = m;
     pzinfo->k = k;
@@ -134,32 +137,31 @@ int z_init(z_info_t *pzinfo, int m, int k, int datasize, int packetsize)
     pzinfo->datasize = datasize;
     pzinfo->packetsize = packetsize;
 
-    pzinfo->blocksize = get_block_size(pzinfo->datasize, pzinfo->pmat);
+    pzinfo->blocksize = get_block_size(datasize, m, k);
+
+    return LIL_R(m, k);
+}
+
+int z_free(z_info_t *pzinfo){
+
+    lil_free(pzinfo->pzlil);
+    //free(pzinfo);
 
     return 1;
 }
 
-int z_free(z_info_t *pzinfo)
-{
-    mat_free(pzinfo->pmat);
-    free(pzinfo->pmat);
-
-    return 1;
-}
-
-int z_encode(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes)
-{
-    int blocksize = pzinfo->blocksize;
+int z_encode(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes){
 
     // encode 
-    mxcoding_pbg(pdes, psrc, blocksize, pzinfo->packetsize, pzinfo->pmat);
+    mxcoding_pbg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
+    //mxcoding_ppg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
 
     return 1;
 }
+
 /**
  * repair one node;
  * @param node, the node to be repaired, start from 0 to k-1;
- */
 int z_repair(z_info_t *pzinfo, unsigned char *psrc, blist_t *phelp,int node, unsigned char *pdes)
 {
     if (node >= pzinfo->k) {
@@ -210,3 +212,4 @@ int z_repair(z_info_t *pzinfo, unsigned char *psrc, blist_t *phelp,int node, uns
 
     return 1;
 }
+ */

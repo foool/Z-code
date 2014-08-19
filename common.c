@@ -76,3 +76,13 @@ void *rlc_alloc(const char *filename, int line, const char *function, int size)
     }
     return ptr;
 }
+
+inline
+int math_pow(int exp, int index){
+    int i, accum;
+    for(i = 0, accum=1; i < index; ++i){
+        accum = accum*exp;
+    }
+
+    return accum;
+}

@@ -153,7 +153,16 @@ int z_free(z_info_t *pzinfo){
 int z_encode(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes){
 
     // encode 
-    mxcoding_pbg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
+    mxcoding_dbg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
+    //mxcoding_ppg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
+
+    return 1;
+}
+
+int z_encode_dpg(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes){
+
+    // encode 
+    mxcoding_dpg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
     //mxcoding_ppg(pdes, psrc, pzinfo->blocksize, pzinfo->packetsize, pzinfo->pzlil,  pzinfo->m, pzinfo->k);
 
     return 1;

@@ -29,6 +29,7 @@ int z_free(z_info_t *pzinfo);
  * psrc, and pdes already alloc enough memory.
  */
 int z_encode(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes);
+int z_encode_dpg(z_info_t *pzinfo, unsigned char *psrc, unsigned char *pdes);
 
 /**
  * repair node data chunk, store data to pdes.

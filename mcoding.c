@@ -31,7 +31,7 @@ int get_block_size(int file_size, int m, int k){
     return block_size;
 }
 
-int mxcoding_pbg(unsigned char *pdes, unsigned char *psrc, int block_size, int packet_size, lil_t *pzlil, int m, int k){
+int mxcoding_dbg(unsigned char *pdes, unsigned char *psrc, int block_size, int packet_size, lil_t *pzlil, int m, int k){
     int row, col;
     int i, j, p;
     int times;
@@ -85,8 +85,7 @@ int mxcoding_pbg(unsigned char *pdes, unsigned char *psrc, int block_size, int p
 }
 
 
-/*
-int mxcoding_ppg(unsigned char *pdes, unsigned char *psrc, int block_size, int packet_size, lil_t *pzlil, int m, int k){
+int mxcoding_dpg(unsigned char *pdes, unsigned char *psrc, int block_size, int packet_size, lil_t *pzlil, int m, int k){
     int row, col;
     int i, j, p;
     int times;
@@ -111,39 +110,39 @@ int mxcoding_ppg(unsigned char *pdes, unsigned char *psrc, int block_size, int p
     rest_size = block_size - times*packet_size;
     if(rest_size == 0){
         printf("Encoding rest size == 0\n");
-        pgdes = (gfele_t *)(pdes);
-        for(i = 0; i < row; ++i){
+        for(i = 0; i < col; ++i){
+            pgsrc = (gfele_t *)(psrc + i*block_size);
             for(p = 0; p < times; ++p){
-                pgsrc = (gfele_t *)(psrc + p*packet_size);
-                for(j = 0; j < col; ++j){
-                    val = (gfele_t )pzlil[j*m+i];
-                    region_xor(pgdes, pgsrc+val*bgfsize, packet_size);
+                for(j = 0; j < row; ++j){
+                    val = (gfele_t )pzlil[i*row+j];
+                    if(p == 0) printf("(%d, %d) = %d\n",i, j, val);
+                    pgdes = (gfele_t *)(pdes+val*block_size+p*pgfsize);
+                    region_xor(pgdes, pgsrc, packet_size);
                 }
-                pgdes = pgdes + pgfsize;
+                pgsrc = pgsrc + pgfsize;
             }
         }
     }else{
         printf("Encoding rest size != 0\n");
-        pgdes = (gfele_t *)(pdes);
-        for(i = 0; i < row; ++i){
+        pgsrc = (gfele_t *)(psrc);
+        for(i = 0; i < col; ++i){
+            pgsrc = (gfele_t *)(psrc + i*block_size);
             for(p = 0; p < times; ++p){
-                printf("times : %d\n",p);
-                pgsrc = (gfele_t *)(psrc + p*packet_size);
-                for(j = 0; j < col; ++j){
-                    val = (gfele_t )pzlil[j*m+i];
-                    region_xor(pgdes, pgsrc+val*bgfsize, packet_size);
+                for(j = 0; j < row; ++j){
+                    val = (gfele_t )pzlil[i*row+j];
+                    if(p == 0) printf("(%d, %d) = %d\n",i, j, val);
+                    pgdes = (gfele_t *)(pdes+val*block_size+p*pgfsize);
+                    region_xor(pgdes, pgsrc, packet_size);
                 }
-                pgdes = pgdes + pgfsize;
+                pgsrc = pgsrc + pgfsize;
             }
-            pgsrc = (gfele_t *)(psrc + times*packet_size);
-            for(j = 0; j < col; ++j){
-                val = (gfele_t )pzlil[j*m+i];
-                region_xor(pgdes, pgsrc+val*bgfsize, packet_size);
+            for(j = 0; j < row; ++j){
+                val = (gfele_t )pzlil[i*row+j];
+                pgdes = (gfele_t *)(pdes+val*block_size+times*packet_size);
+                region_xor(pgdes, pgsrc, rest_size);
             }
-            pgdes = pgdes + rest_size/sizeof(gfele_t);
         }
     }
 
     return 1;
 }
-*/

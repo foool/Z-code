@@ -23,7 +23,7 @@ int main(int argc, char const* argv[])
     int node = 1;  // init to 1, repair node number
     int datasize = 512*1024*1024; // init to 512M, file size
     int packetsize = 2*1024; // init to 2KB, process unit 
-    unsigned char *pdata, *psrc, *pdes;
+    unsigned char *pdata, *psrc, *pdes, *pdes2;
 
     if (argc>1 && !strcmp(argv[1], "-h")) {
         help(argv[0]);
@@ -45,14 +45,22 @@ int main(int argc, char const* argv[])
     printf("main block_size : %d\n",zcode.blocksize);
 
     // init data 
-    pdata = (unsigned char *)malloc((m+k)*r*zcode.blocksize);
+    pdata = (unsigned char *)malloc((2*m+k)*r*zcode.blocksize);
 
     // test zcode encode
     printf("Encode zcode:\n");
     psrc = pdata;
     pdes = pdata + (k*r*(zcode.blocksize));
+    pdes2 = pdes + (m*r*(zcode.blocksize));
+    memset(pdes, 0, 2*m*r*(zcode.blocksize));
     z_encode(&zcode, psrc, pdes);
+    z_encode(&zcode, psrc, pdes2);
 
+    if(memcmp(pdes, pdes2, (2*m+k)*r*zcode.blocksize) == 0){
+        printf("equal!\n");
+    }else{
+        printf("not equal \n");
+    }
     z_free(&zcode);
     free(pdata);
 

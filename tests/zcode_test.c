@@ -54,7 +54,7 @@ int main(int argc, char const* argv[])
     pdes2 = pdes + (m*r*(zcode.blocksize));
     memset(pdes, 0, 2*m*r*(zcode.blocksize));
     z_encode(&zcode, psrc, pdes);
-    z_encode(&zcode, psrc, pdes2);
+    z_encode_dpg(&zcode, psrc, pdes2);
 
     if(memcmp(pdes, pdes2, m*r*zcode.blocksize) == 0){
         printf("equal!\n");

@@ -56,7 +56,7 @@ int main(int argc, char const* argv[])
     z_encode(&zcode, psrc, pdes);
     z_encode(&zcode, psrc, pdes2);
 
-    if(memcmp(pdes, pdes2, (2*m+k)*r*zcode.blocksize) == 0){
+    if(memcmp(pdes, pdes2, m*r*zcode.blocksize) == 0){
         printf("equal!\n");
     }else{
         printf("not equal \n");

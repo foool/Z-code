@@ -99,14 +99,12 @@ int mxcoding_dpg(unsigned char *pdes, unsigned char *psrc, int block_size, int p
     row = m;
     col = LIL_COL(m, k);
     times = block_size/packet_size;
-    printf("times = %d\n", times);
     bgfsize = block_size/sizeof(gfele_t);
     pgfsize = packet_size/sizeof(gfele_t);
     printf("block size = %d\n", block_size);
 
     memset(pdes, 0, row*block_size);
 
-    printf("Encoding begin\n");
     rest_size = block_size - times*packet_size;
     if(rest_size == 0){
         printf("Encoding rest size == 0\n");
@@ -116,7 +114,7 @@ int mxcoding_dpg(unsigned char *pdes, unsigned char *psrc, int block_size, int p
                 for(j = 0; j < row; ++j){
                     val = (gfele_t )pzlil[i*row+j];
                     if(p == 0) printf("(%d, %d) = %d\n",i, j, val);
-                    pgdes = (gfele_t *)(pdes+val*block_size+p*pgfsize);
+                    pgdes = (gfele_t *)(pdes+val*block_size+p*packet_size);
                     region_xor(pgdes, pgsrc, packet_size);
                 }
                 pgsrc = pgsrc + pgfsize;
@@ -131,7 +129,7 @@ int mxcoding_dpg(unsigned char *pdes, unsigned char *psrc, int block_size, int p
                 for(j = 0; j < row; ++j){
                     val = (gfele_t )pzlil[i*row+j];
                     if(p == 0) printf("(%d, %d) = %d\n",i, j, val);
-                    pgdes = (gfele_t *)(pdes+val*block_size+p*pgfsize);
+                    pgdes = (gfele_t *)(pdes+val*block_size+p*packet_size);
                     region_xor(pgdes, pgsrc, packet_size);
                 }
                 pgsrc = pgsrc + pgfsize;

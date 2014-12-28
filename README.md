@@ -2,7 +2,7 @@ Z codes
 =======
 
 ####1. Introduction
-Z codes are a class of XOR erasure codes that achieve the optimal repair bandwidth for data blocks' repairing. this demo library provide interfaces to generate PGM(Parity Generator Matrix) of Z codes, perform in-memory encoding and repairing. Free to enjoy it.
+Z codes are a class of repair-bandwidth-efficient erasure codes that can achieve the optimal repair bandwidth for a single data node failure with only XOR operations. This demo library provides interfaces to generate PGM(Parity Generator Matrix) of Z codes, perform in-memory encoding and repairing. Free to enjoy it.
 
 ####2. Files' description
 > - common.c provides some common functions that would be used in other files
